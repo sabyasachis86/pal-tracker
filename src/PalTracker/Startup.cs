@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace PalTracker
 {
@@ -26,6 +20,13 @@ namespace PalTracker
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSingleton(sp => new WelcomeMessage(Configuration.GetValue<string>("WELCOME_MESSAGE", "WELCOME_MESSAGE not configured.")));
+            services.AddSingleton(xy=>new CloudFoundryInfo(
+                        Configuration.GetValue<String>("PORT","port not set"),
+                        Configuration.GetValue<String>("MEMORY_LIMIT","memory not set"),
+                        Configuration.GetValue<String>("CF_INSTANCE_INDEX","CF instance not set"),
+                        Configuration.GetValue<String>("CF_INSTANCE_ADDR","Instance address not set")
+                         ));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
