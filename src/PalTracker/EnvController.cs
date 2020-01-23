@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 
+
+
 namespace PalTracker
 {
     [Route("env")]
@@ -12,7 +14,7 @@ namespace PalTracker
 
         public EnvController(CloudFoundryInfo cloudFoundryEnv)
         {
-            _cloudFoundryEnv = cloudFoundryEnv ?? throw new System.ArgumentNullException(nameof(cloudFoundryEnv));
+            _cloudFoundryEnv = cloudFoundryEnv;
         }
     }
 }

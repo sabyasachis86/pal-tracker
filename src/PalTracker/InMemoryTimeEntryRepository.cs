@@ -1,41 +1,58 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace PalTracker
 {
     public class InMemoryTimeEntryRepository : ITimeEntryRepository
     {
-        private readonly IDictionary<long, TimeEntry> _timeEntries = new Dictionary<long, TimeEntry>();
-
-        public TimeEntry Create(TimeEntry timeEntry)
+        long current_id = 0; 
+        public Dictionary<long , TimeEntry> timeEntryobjects = new Dictionary<long, TimeEntry>();
+        public bool Contains(long id)
         {
-            var id = _timeEntries.Count + 1;
-
-            timeEntry.Id = id;
-
-            _timeEntries.Add(id, timeEntry);
-
-            return timeEntry;
+            return timeEntryobjects.ContainsKey(id);
         }
 
-        public TimeEntry Find(long id) => _timeEntries[id];
+        public TimeEntry Create(TimeEntry timeEntry)
+        {   
+            timeEntry.Id = ++current_id ;
+            timeEntryobjects.Add(current_id, timeEntry);
+            return timeEntry;
+            //throw new NotImplementedException();
+        }
 
-        public bool Contains(long id) => _timeEntries.ContainsKey(id);
+        public TimeEntry Find(long id)
+        {
+            if(timeEntryobjects.ContainsKey(id))
+            {
+                return timeEntryobjects[id];
+            }
+            else
+            {
+             return  null;
+            }
+        }
 
-        public IEnumerable<TimeEntry> List() => _timeEntries.Values.ToList();
+        public  IEnumerable<TimeEntry> List()
+        {
+            return timeEntryobjects.Values;
+        }
 
         public TimeEntry Update(long id, TimeEntry timeEntry)
         {
-            timeEntry.Id = id;
-
-            _timeEntries[id] = timeEntry;
-
-            return timeEntry;
+            
+                timeEntry.Id  = id ;
+                timeEntryobjects[id] = timeEntry;
+                return timeEntryobjects[id];      
+            
+          
+               
         }
 
         public void Delete(long id)
         {
-            _timeEntries.Remove(id);
+           
+                timeEntryobjects.Remove(id);
+            
         }
     }
 }
